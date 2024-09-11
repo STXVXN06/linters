@@ -1,0 +1,36 @@
+name: Pylint Chech
+
+on:
+  push:
+    branches:
+      - "**" # Todas las ramas
+  pull_request:
+    branches:
+      - "**" # Todas las ramas
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install dependecies from requirements.txt
+        run:
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt # Instala todas las dependencias
+
+      - name: Run Pylint on the whole project
+        run:
+          pylint ./**/*.py # Ejecuta Pylint en todos los archivos Python del proyecto
+
+      - name: Analysing the code with pylint
+        run:
+          if [ ${{ steps.rate.outputs.rate }} -gt 9 ]; then
+            pylint $
